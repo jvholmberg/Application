@@ -1,0 +1,49 @@
+﻿{
+  "ReRoutes": [
+
+    /* Application.Users */
+
+    {
+      "DownstreamPathTemplate": "/api/users",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001,
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users"
+    },
+
+    /* Application.Memberships */
+
+    {
+      "DownstreamPathTemplate": "/api/memberships",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002,
+        }
+      ],
+      "UpstreamPathTemplate": "/api/memberships"
+    },
+
+    /* Application.Groups */
+    
+    {
+      "DownstreamPathTemplate": "/api/groups",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5003,
+        }
+      ],
+      "UpstreamPathTemplate": "/api/groups"
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:5000"
+  },
+}

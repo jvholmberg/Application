@@ -1,6 +1,20 @@
 ﻿{
   "ReRoutes": [
 
+    /* Application.Authentication */
+
+    {
+      "DownstreamPathTemplate": "/api/authentication",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001,
+        }
+      ],
+      "UpstreamPathTemplate": "/api/authentication"
+    },
+
     /* Application.Users */
 
     {
@@ -9,24 +23,10 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5001,
-        }
-      ],
-      "UpstreamPathTemplate": "/api/users"
-    },
-
-    /* Application.Memberships */
-
-    {
-      "DownstreamPathTemplate": "/api/memberships",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
           "Port": 5002,
         }
       ],
-      "UpstreamPathTemplate": "/api/memberships"
+      "UpstreamPathTemplate": "/api/users"
     },
 
     /* Application.Groups */

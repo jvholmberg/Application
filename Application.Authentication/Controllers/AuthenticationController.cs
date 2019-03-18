@@ -10,27 +10,27 @@ namespace Application.Authentication.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        // GET api/values
+        // GET api/authentication
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
             return new string[] { "auth", "auth" };
         }
 
-        // GET api/values/5
+        // GET api/authentication/5
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
             return "value";
         }
 
-        // POST api/values
+        // POST api/authentication
         [HttpPost]
         public void Post([FromBody] string value)
         {
         }
 
-        // PUT api/values/5
+        // PUT api/authentication/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {

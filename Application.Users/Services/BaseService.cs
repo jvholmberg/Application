@@ -1,39 +1,72 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Application.Users.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Users.Services
 {
     public interface IBaseService
     {
-        Task<Entities.User> GetById(int id);
-        Task<IEnumerable<Entities.User>> Update();
-        Task<IEnumerable<Entities.User>> GetAll();
-
+        Task<Views.Response.User> Register(Views.Request.Register req);
     }
 
     public class BaseService : IBaseService
     {
 
+        private readonly UsersContext _UsersContext;
 
-        public BaseService()
+        public BaseService(UsersContext usersContext)
         {
+            _UsersContext = usersContext;
         }
 
-        public Task<User> GetById(int id)
+        public async Task<Views.Response.User> Register(Views.Request.Register req)
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                // Check if data was provided
+                if (string.IsNullOrWhiteSpace(req.Email)
+                    || string.IsNullOrWhiteSpace(req.Password)
+                    || string.IsNullOrWhiteSpace(req.PasswordVerify))
+                {
+                    throw new Exception();
+                }
 
-        public Task<IEnumerable<User>> Update()
-        {
-            throw new NotImplementedException();
-        }
+                // Check if email already in use
+                var user = await _UsersContext
+                    .Users
+                    .SingleOrDefaultAsync(usr => usr.Email.Equals(req.Email));
+                if (user != null)
+                {
+                    throw new Exception();
+                }
 
-        public Task<IEnumerable<User>> GetAll()
-        {
-            throw new NotImplementedException();
+                // Check if passwords match
+                if (!req.Password.Equals(req.PasswordVerify))
+                {
+                    throw new Exception();
+                }
+
+                // Create new user
+                user = new Entities.User
+                {
+                    Email = req.Email,
+                    Password = req.Password,
+                };
+
+                // Persist user
+                await _UsersContext.SaveChangesAsync();
+
+                return new Views.Response.User
+                {
+                    Email = req.Email,
+                };
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

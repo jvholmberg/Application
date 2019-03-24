@@ -45,7 +45,9 @@ namespace Application.Users
                     options.UseNpgsql(connectionString));
 
             // Add service
-            // services.AddScoped<Services.IAuthService, Services.AuthService>();
+            services.AddScoped<Services.IBaseService, Services.BaseService>();
+            services.AddScoped<Services.IGroupService, Services.GroupService>();
+            services.AddScoped<Services.IAuthService, Services.AuthService>();
 
             // Create key
             var key = Encoding.ASCII.GetBytes(secret);

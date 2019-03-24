@@ -20,5 +20,7 @@
     <Folder Include="Entities\" />
     <Folder Include="Services\" />
     <Folder Include="Views\" />
+    <Folder Include="Views\Request\" />
+    <Folder Include="Views\Response\" />
   </ItemGroup>
 </Project>

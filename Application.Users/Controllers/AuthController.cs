@@ -11,6 +11,14 @@ namespace Application.Users.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+
+        private readonly Services.IAuthService _AuthService;
+
+        public AuthController(Services.IAuthService authService)
+        {
+            _AuthService = authService;
+        }
+
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {

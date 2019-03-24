@@ -11,6 +11,14 @@ namespace Application.Users.Controllers
     [ApiController]
     public class GroupsController : ControllerBase
     {
+
+        private readonly Services.IGroupService _GroupService;
+
+        public GroupsController(Services.IGroupService groupService)
+        {
+            _GroupService = groupService;
+        }
+
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {

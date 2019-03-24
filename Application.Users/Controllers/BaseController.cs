@@ -11,6 +11,13 @@ namespace Application.Users.Controllers
     [ApiController]
     public class BaseController : ControllerBase
     {
+        private readonly Services.IBaseService _BaseService;
+
+        public BaseController(Services.IBaseService baseService)
+        {
+            _BaseService = baseService;
+        }
+
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
@@ -24,8 +31,9 @@ namespace Application.Users.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Register([FromBody] Views.Request.Register req)
         {
+            var user = 
         }
 
         [HttpPut("{id}")]

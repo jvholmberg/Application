@@ -1,14 +1,14 @@
 ﻿using System;
-namespace Application.Authentication.Entities
+namespace Application.Users.Entities
 {
-    public class Role
+    public class Status
     {
 
         public int Id { get; set; }
 
         public string Name { get; set; }
 
-        public Role()
+        public Status()
         {
         }
     }

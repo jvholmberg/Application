@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Users", "Applic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Gateway", "Application.Gateway\Application.Gateway.csproj", "{D1F91F0C-097E-4DC4-ACBF-EDA7EC85970F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Authentication", "Application.Authentication\Application.Authentication.csproj", "{75C1C631-8FEC-4FDF-B013-C0D426322180}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Groups", "Application.Groups\Application.Groups.csproj", "{AF8F2A0B-BB2F-4A42-8794-6D3203DCD3CB}"
 EndProject
 Global
@@ -23,10 +21,6 @@ Global
 		{D1F91F0C-097E-4DC4-ACBF-EDA7EC85970F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1F91F0C-097E-4DC4-ACBF-EDA7EC85970F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1F91F0C-097E-4DC4-ACBF-EDA7EC85970F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{75C1C631-8FEC-4FDF-B013-C0D426322180}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{75C1C631-8FEC-4FDF-B013-C0D426322180}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{75C1C631-8FEC-4FDF-B013-C0D426322180}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{75C1C631-8FEC-4FDF-B013-C0D426322180}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AF8F2A0B-BB2F-4A42-8794-6D3203DCD3CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AF8F2A0B-BB2F-4A42-8794-6D3203DCD3CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF8F2A0B-BB2F-4A42-8794-6D3203DCD3CB}.Release|Any CPU.ActiveCfg = Release|Any CPU

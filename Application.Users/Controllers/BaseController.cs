@@ -2,41 +2,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Application.Authentication.Controllers
+namespace Application.Users.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
-    public class AuthenticationController : ControllerBase
+    public class BaseController : ControllerBase
     {
-        // GET api/authentication
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "auth", "auth" };
+            return new string[] { "users", "users" };
         }
 
-        // GET api/authentication/5
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
             return "value";
         }
 
-        // POST api/authentication
         [HttpPost]
         public void Post([FromBody] string value)
         {
         }
 
-        // PUT api/authentication/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

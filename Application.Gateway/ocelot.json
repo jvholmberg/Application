@@ -8,7 +8,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5002,
+          "Port": 5002
         }
       ],
       "UpstreamPathTemplate": "/api/users"
@@ -20,7 +20,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5002,
+          "Port": 5002
         }
       ],
       "UpstreamPathTemplate": "/api/users/groups"
@@ -32,27 +32,27 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5002,
+          "Port": 5002
         }
       ],
       "UpstreamPathTemplate": "/api/users/auth"
     },
 
-    /* Application.Groups */
+    /* Application.Posts */
     
     {
-      "DownstreamPathTemplate": "/api/groups",
+      "DownstreamPathTemplate": "/api/posts",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5003,
+          "Port": 5003
         }
       ],
-      "UpstreamPathTemplate": "/api/groups"
+      "UpstreamPathTemplate": "/api/posts"
     }
   ],
   "GlobalConfiguration": {
     "BaseUrl": "https://localhost:5000"
-  },
+  }
 }

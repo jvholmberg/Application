@@ -13,6 +13,10 @@ namespace Application.Users.Entities
 
         public Group Group { get; set; }
 
+        public DateTime CreatedAt { get; set; }
+
+        public DateTime LastUpdated { get; set; }
+
         public Membership()
         {
         }

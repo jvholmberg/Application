@@ -8,12 +8,12 @@ namespace Application.Users
         public UsersContext(DbContextOptions<UsersContext> options)
                 : base(options) { }
 
-        public DbSet<Entities.User> User { get; set; }
-        public DbSet<Entities.Group> Group { get; set; }
-        public DbSet<Entities.Membership> Membership { get; set; }
-        public DbSet<Entities.Language> Language { get; set; }
-        public DbSet<Entities.Role> Role { get; set; }
-        public DbSet<Entities.Status> Status { get; set; }
+        public DbSet<Entities.User> Users { get; set; }
+        public DbSet<Entities.Group> Groups { get; set; }
+        public DbSet<Entities.Membership> Memberships { get; set; }
+        public DbSet<Entities.Language> Languages { get; set; }
+        public DbSet<Entities.Role> Roles { get; set; }
+        public DbSet<Entities.Status> Statuses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -74,6 +74,4 @@ namespace Application.Users
                 .ToTable("status");
         }
     }
-
-
 }

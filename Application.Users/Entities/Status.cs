@@ -8,9 +8,8 @@ namespace Application.Users.Entities
 
         public string Name { get; set; }
 
-        public Status()
-        {
-        }
+        public string Code { get; set; }
+
     }
     public enum StatusName {
         Inactive,

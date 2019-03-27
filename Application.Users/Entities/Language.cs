@@ -9,8 +9,5 @@ namespace Application.Users.Entities
 
         public string Code { get; set; }
 
-        public Language()
-        {
-        }
     }
 }

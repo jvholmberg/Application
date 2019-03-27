@@ -8,8 +8,7 @@ namespace Application.Users.Entities
 
         public string Name { get; set; }
 
-        public Role()
-        {
-        }
+        public string Code { get; set; }
+
     }
 }

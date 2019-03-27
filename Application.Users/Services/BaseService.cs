@@ -18,12 +18,18 @@ namespace Application.Users.Services
     {
 
         private readonly UsersContext _UsersContext;
-        private readonly StatusService _StatusService;
+
+        private readonly IStatusService _StatusService;
+        private readonly IRoleService _RoleService;
+        private readonly ILanguageService _LanguageService;
 
         public BaseService(UsersContext usersContext)
         {
             _UsersContext = usersContext;
+
             _StatusService = new StatusService(usersContext);
+            _RoleService = new RoleService(usersContext);
+            _LanguageService = new LanguageService(usersContext);
         }
 
         public async Task<bool> Register(Views.Request.Register req)
@@ -140,6 +146,51 @@ namespace Application.Users.Services
                     .Include(usr => usr.Role)
                     .Include(usr => usr.Language)
                     .SingleOrDefaultAsync(usr => usr.Id.Equals(id));
+
+                // Update Status if Provided
+                if (req.StatusCode != null)
+                {
+                    var status = _StatusService.FindByCode(req.StatusCode);
+                    entity.Status = status;
+                }
+
+                // Update Role if Provided
+                if (req.RoleCode != null)
+                {
+                    var role = _RoleService.FindByCode(req.RoleCode);
+                    entity.Role = role;
+                }
+
+                // Update Language if Provided
+                if (req.LanguageCode != null)
+                {
+                    var language = _LanguageService.FindByCode(req.LanguageCode);
+                    entity.Language = language;
+                }
+
+                // Update Email if Provided
+                if (req.Email != null)
+                {
+                    entity.Email = req.Email;
+                }
+
+                // Update FirstName if provided
+                if (req.FirstName != null)
+                {
+                    entity.FirstName = req.FirstName;
+                }
+
+                // Update LastName if provided
+                if (req.LastName != null)
+                {
+                    entity.LastName = req.LastName;
+                }
+
+                // Update Avatar if provided
+                if (req.Avatar != null)
+                {
+                    entity.Avatar = req.Avatar;
+                }
 
                 // Track changes to user
                 _UsersContext.Users.Update(entity);

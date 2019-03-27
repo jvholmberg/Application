@@ -17,8 +17,27 @@ namespace Application.Users.Views.Response
 
         public DateTime LastUpdated { get; set; }
 
-        public Membership()
+        public Membership(Entities.Membership membership)
         {
+            Id = membership.Id;
+            if (membership.Status != null)
+            {
+                Status = new Status(membership.Status);
+            }
+            if (membership.Role != null)
+            {
+                Role = new Role(membership.Role);
+            }
+            if (membership.User != null)
+            {
+                User = new User(membership.User);
+            }
+            if (membership.Group != null)
+            {
+                Group = new Group(membership.Group);
+            }
+            CreatedAt = membership.CreatedAt;
+            LastUpdated = membership.LastUpdated;
         }
     }
 }

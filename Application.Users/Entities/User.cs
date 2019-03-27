@@ -36,8 +36,5 @@ namespace Application.Users.Entities
 
         public DateTime LastUpdated { get; set; }
 
-        public User()
-        {
-        }
     }
 }

@@ -9,8 +9,11 @@ namespace Application.Users.Views.Response
 
         public string Code { get; set; }
 
-        public Language()
+        public Language(Entities.Language language)
         {
+            Id = language.Id;
+            Name = language.Name;
+            Code = language.Code;
         }
     }
 }

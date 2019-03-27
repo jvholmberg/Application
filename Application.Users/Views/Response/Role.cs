@@ -8,8 +8,10 @@ namespace Application.Users.Views.Response
 
         public string Name { get; set; }
 
-        public Role()
+        public Role(Entities.Role role)
         {
+            Id = role.Id;
+            Name = role.Name;
         }
     }
 }

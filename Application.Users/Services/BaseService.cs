@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,20 +8,25 @@ namespace Application.Users.Services
 {
     public interface IBaseService
     {
-        Task<Views.Response.User> Register(Views.Request.Register req);
+        Task<bool> Register(Views.Request.Register req);
+        Task<IEnumerable<Views.Response.User>> GetAll();
+        Task<Views.Response.User> GetById(int id);
+        Task<Views.Response.User> Update(int id, Views.Request.Update req);
     }
 
     public class BaseService : IBaseService
     {
 
         private readonly UsersContext _UsersContext;
+        private readonly StatusService _StatusService;
 
         public BaseService(UsersContext usersContext)
         {
             _UsersContext = usersContext;
+            _StatusService = new StatusService(usersContext);
         }
 
-        public async Task<Views.Response.User> Register(Views.Request.Register req)
+        public async Task<bool> Register(Views.Request.Register req)
         {
             try
             {
@@ -47,20 +53,102 @@ namespace Application.Users.Services
                     throw new Exception();
                 }
 
+                // Find status by name
+                var statusName = Entities.StatusName.Pending.ToString();
+                var status = _StatusService.FindByName(statusName);
+
+
                 // Create new user
                 user = new Entities.User
                 {
                     Email = req.Email,
                     Password = req.Password,
+                    Status = status,
+                    LastUpdated = DateTime.Now,
+                    CreatedAt = DateTime.Now
                 };
 
-                // Persist user
+                // Add user to context
+                _UsersContext.Users.Add(user);
+
+                // Persist context
                 await _UsersContext.SaveChangesAsync();
 
-                return new Views.Response.User
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IEnumerable<Views.Response.User>> GetAll()
+        {
+            try
+            {
+                var entities = await _UsersContext
+                    .Users
+                    .ToListAsync();
+                var views = entities.Select(usr => new Views.Response.User(usr));
+                return views;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<Views.Response.User> GetById(int id)
+        {
+            try
+            {
+                // Get entity from db
+                var entity = await _UsersContext
+                    .Users
+                    .Include(usr => usr.Status)
+                    .Include(usr => usr.Role)
+                    .Include(usr => usr.Language)
+                    .Include(usr => usr.Memberships)
+                        .ThenInclude(mem => mem.Group)
+                    .SingleOrDefaultAsync(usr => usr.Id.Equals(id));
+
+                // No entity was found
+                if (entity == null)
                 {
-                    Email = req.Email,
-                };
+                    throw new Exception();
+                }
+
+                var view = new Views.Response.User(entity);
+
+                return view;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+    
+        public async Task<Views.Response.User> Update(int id, Views.Request.Update req)
+        {
+            try
+            {
+                // Get entity from db
+                var entity = await _UsersContext
+                    .Users
+                    .Include(usr => usr.Status)
+                    .Include(usr => usr.Role)
+                    .Include(usr => usr.Language)
+                    .SingleOrDefaultAsync(usr => usr.Id.Equals(id));
+
+                // Track changes to user
+                _UsersContext.Users.Update(entity);
+
+                // Persist changes
+                await _UsersContext.SaveChangesAsync();
+
+                var view = new Views.Response.User(entity);
+                return view;
 
             }
             catch (Exception ex)

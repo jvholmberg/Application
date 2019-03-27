@@ -8,8 +8,10 @@ namespace Application.Users.Views.Response
 
         public string Name { get; set; }
 
-        public Status()
+        public Status(Entities.Status status)
         {
+            Id = status.Id;
+            Name = status.Name;
         }
     }
 }

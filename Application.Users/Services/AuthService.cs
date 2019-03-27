@@ -14,7 +14,6 @@ namespace Application.Users.Services
     public class AuthService : IAuthService
     {
 
-
         public AuthService()
         {
         }

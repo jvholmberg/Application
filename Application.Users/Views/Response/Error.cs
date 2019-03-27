@@ -8,8 +8,6 @@ namespace Application.Users.Views.Response
 
         public string Message { get; set; }
 
-        public ICollection<string> Data { get; set; }
-
         public string StackTrace { get; set; }
     }
 }

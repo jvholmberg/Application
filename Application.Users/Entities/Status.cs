@@ -12,4 +12,9 @@ namespace Application.Users.Entities
         {
         }
     }
+    public enum StatusName {
+        Inactive,
+        Pending,
+        Active
+    }
 }

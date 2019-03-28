@@ -76,11 +76,9 @@ namespace Application.Users.Services
                     Password = req.Password,
                     Status = status,
                     Role = role,
-                    LastUpdated = DateTime.Now,
-                    CreatedAt = DateTime.Now
+                    LastUpdated = DateTime.UtcNow,
+                    CreatedAt = DateTime.UtcNow
                 };
-
-                // Add user to context
                 _UsersContext.Users.Add(entity);
 
                 // Persist context
@@ -199,8 +197,13 @@ namespace Application.Users.Services
                     entity.Avatar = req.Avatar;
                 }
 
+                // Set last time of update
+                entity.LastUpdated = DateTime.UtcNow;
+
                 // Update user
-                _UsersContext.Users.Update(entity);
+                _UsersContext
+                    .Users
+                    .Update(entity);
 
                 // Persist changes
                 await _UsersContext.SaveChangesAsync();

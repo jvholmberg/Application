@@ -7,6 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Gateway", "Appl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Posts", "Application.Posts\Application.Posts.csproj", "{3794D6AE-5140-4E45-917E-062650E69F66}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B2A89DFC-D174-45E9-8DEB-6B3556083953}"
+	ProjectSection(SolutionItems) = preProject
+		createMigration.sh = createMigration.sh
+		applyMigration.sh = applyMigration.sh
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

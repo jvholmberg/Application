@@ -13,6 +13,17 @@
       ],
       "UpstreamPathTemplate": "/api/users"
     },
+    {
+      "DownstreamPathTemplate": "/api/users/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users/{id}"
+    },
 
     {
       "DownstreamPathTemplate": "/api/users/groups",

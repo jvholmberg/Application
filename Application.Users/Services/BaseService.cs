@@ -8,10 +8,11 @@ namespace Application.Users.Services
 {
     public interface IBaseService
     {
-        Task<bool> Register(Views.Request.Register req);
+        Task<Views.Response.User> Register(Views.Request.Register req);
         Task<IEnumerable<Views.Response.User>> GetAll();
         Task<Views.Response.User> GetById(int id);
         Task<Views.Response.User> Update(int id, Views.Request.Update req);
+        Task<Views.Response.User> Deactivate(int id);
     }
 
     public class BaseService : IBaseService
@@ -32,7 +33,7 @@ namespace Application.Users.Services
             _LanguageService = new LanguageService(usersContext);
         }
 
-        public async Task<bool> Register(Views.Request.Register req)
+        public async Task<Views.Response.User> Register(Views.Request.Register req)
         {
             try
             {
@@ -45,10 +46,10 @@ namespace Application.Users.Services
                 }
 
                 // Check if email already in use
-                var user = await _UsersContext
+                var entity = await _UsersContext
                     .Users
                     .SingleOrDefaultAsync(usr => usr.Email.Equals(req.Email));
-                if (user != null)
+                if (entity != null)
                 {
                     throw new Exception();
                 }
@@ -69,7 +70,7 @@ namespace Application.Users.Services
 
 
                 // Create new user
-                user = new Entities.User
+                entity = new Entities.User
                 {
                     Email = req.Email,
                     Password = req.Password,
@@ -80,12 +81,13 @@ namespace Application.Users.Services
                 };
 
                 // Add user to context
-                _UsersContext.Users.Add(user);
+                _UsersContext.Users.Add(entity);
 
                 // Persist context
                 await _UsersContext.SaveChangesAsync();
 
-                return true;
+                var view = new Views.Response.User(entity);
+                return view;
 
             }
             catch (Exception ex)
@@ -197,7 +199,7 @@ namespace Application.Users.Services
                     entity.Avatar = req.Avatar;
                 }
 
-                // Track changes to user
+                // Update user
                 _UsersContext.Users.Update(entity);
 
                 // Persist changes
@@ -206,6 +208,40 @@ namespace Application.Users.Services
                 var view = new Views.Response.User(entity);
                 return view;
 
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<Views.Response.User> Deactivate(int id)
+        {
+            try
+            {
+                // Get entity from db
+                var entity = await _UsersContext
+                    .Users
+                    .Include(usr => usr.Memberships)
+                        .ThenInclude(mem => mem.Group)
+                    .SingleOrDefaultAsync(usr => usr.Id.Equals(id));
+
+                // Find status by name
+                var statusName = Entities.StatusName.Inactive.ToString();
+                var status = _StatusService.FindByName(statusName);
+
+                // Set status on user and memberships to inactive
+                entity.Status = status;
+                entity.Memberships.Select(mem => mem.Status = status);
+
+                // Update user
+                _UsersContext.Users.Update(entity);
+
+                // Persist changes
+                await _UsersContext.SaveChangesAsync();
+
+                var view = new Views.Response.User(entity);
+                return view;
             }
             catch (Exception ex)
             {

@@ -28,13 +28,13 @@ namespace Application.Users.Controllers
             }
             catch (Exception ex)
             {
-                var res = new Views.Response.Error
+                var err = new Views.Response.Error
                 {
                     Type = ex.Source,
                     Message = ex.Message,
                     StackTrace = ex.StackTrace
                 };
-                return BadRequest(res);
+                return BadRequest(err);
             }
         }
 
@@ -48,13 +48,13 @@ namespace Application.Users.Controllers
             }
             catch (Exception ex)
             {
-                var res = new Views.Response.Error
+                var err = new Views.Response.Error
                 {
                     Type = ex.Source,
                     Message = ex.Message,
                     StackTrace = ex.StackTrace
                 };
-                return BadRequest(res);
+                return BadRequest(err);
             }
         }
 
@@ -68,13 +68,13 @@ namespace Application.Users.Controllers
             }
             catch (Exception ex)
             {
-                var res = new Views.Response.Error
+                var err = new Views.Response.Error
                 {
                     Type = ex.Source,
                     Message = ex.Message,
                     StackTrace = ex.StackTrace
                 };
-                return BadRequest(res);
+                return BadRequest(err);
             }
         }
 
@@ -88,19 +88,34 @@ namespace Application.Users.Controllers
             }
             catch (Exception ex)
             {
-                var res = new Views.Response.Error
+                var err = new Views.Response.Error
                 {
                     Type = ex.Source,
                     Message = ex.Message,
                     StackTrace = ex.StackTrace
                 };
-                return BadRequest(res);
+                return BadRequest(err);
             }
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Deactivate(int id)
         {
+            try
+            {
+                var res = await _BaseService.Deactivate(id);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                var err = new Views.Response.Error
+                {
+                    Type = ex.Source,
+                    Message = ex.Message,
+                    StackTrace = ex.StackTrace
+                };
+                return BadRequest(err);
+            }
         }
     }
 }

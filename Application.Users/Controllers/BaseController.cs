@@ -79,15 +79,22 @@ namespace Application.Users.Controllers
         }
 
         [HttpPut("{id}")]
-        public void Update(int id, [FromBody] string value)
+        public async Task<IActionResult> Update(int id, [FromBody] Views.Request.Update req)
         {
             try
             {
-
+                var res = await _BaseService.Update(id, req);
+                return Ok(res);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                var res = new Views.Response.Error
+                {
+                    Type = ex.Source,
+                    Message = ex.Message,
+                    StackTrace = ex.StackTrace
+                };
+                return BadRequest(res);
             }
         }
 

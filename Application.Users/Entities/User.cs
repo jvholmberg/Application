@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.Users.Entities
 {
     public class User
     {
 
+        [Key]
         public int Id { get; set; }
 
         public Status Status { get; set; }

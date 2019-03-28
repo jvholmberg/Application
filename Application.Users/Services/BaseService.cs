@@ -63,6 +63,10 @@ namespace Application.Users.Services
                 var statusName = Entities.StatusName.Pending.ToString();
                 var status = _StatusService.FindByName(statusName);
 
+                // Find role by name
+                var roleName = Entities.RoleName.User.ToString();
+                var role = _RoleService.FindByName(roleName);
+
 
                 // Create new user
                 user = new Entities.User
@@ -70,6 +74,7 @@ namespace Application.Users.Services
                     Email = req.Email,
                     Password = req.Password,
                     Status = status,
+                    Role = role,
                     LastUpdated = DateTime.Now,
                     CreatedAt = DateTime.Now
                 };

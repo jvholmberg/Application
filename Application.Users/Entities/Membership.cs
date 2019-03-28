@@ -1,8 +1,11 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace Application.Users.Entities
 {
     public class Membership
     {
+        [Key]
         public int Id { get; set; }
 
         public Status Status { get; set; }

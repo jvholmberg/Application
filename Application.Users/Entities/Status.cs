@@ -19,11 +19,4 @@ namespace Application.Users.Entities
         Pending,
         Active
     }
-
-    public enum StatusCode
-    {
-        INACTIVE,
-        PENDING,
-        ACTIVE
-    }
 }

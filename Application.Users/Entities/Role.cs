@@ -18,10 +18,4 @@ namespace Application.Users.Entities
         Admin,
         User
     }
-
-    public enum RoleCode
-    {
-        ADMIN,
-        USER
-    }
 }

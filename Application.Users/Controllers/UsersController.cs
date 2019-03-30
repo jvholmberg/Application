@@ -26,10 +26,20 @@ namespace Application.Users.Controllers
                 var res = await _UserService.GetAll();
                 return Ok(res);
             }
-            catch (Exception ex)
+            catch (Core.Exceptions.NotFoundException)
+            {
+                return NoContent();
+            }
+            catch (Core.Exceptions.UnauthorizedException ex)
             {
                 var err = new Core.Views.Response.Error(ex);
-                return BadRequest(err);
+                return Unauthorized(err);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+                // var err = new Core.Views.Response.Error(ex);
+                // return BadRequest(err);
             }
         }
 

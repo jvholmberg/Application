@@ -25,7 +25,7 @@ namespace Application.Users.Controllers
             try
             {
                 // TODO: Get userId from headers
-                var res = await _AuthService.Refresh(1, refreshToken);
+                var res = await _AuthService.Refresh(1, "", refreshToken);
                 return Ok(res);
             }
             catch (Exception ex)
@@ -41,7 +41,7 @@ namespace Application.Users.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Validate([FromBody]Views.Request.Login req)
+        public async Task<IActionResult> Validate([FromBody]Views.Request.ValidateAuth req)
         {
             try
             {

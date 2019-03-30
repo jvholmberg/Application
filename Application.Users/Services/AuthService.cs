@@ -6,8 +6,8 @@ namespace Application.Users.Services
 {
     public interface IAuthService
     {
-        Task<Views.Response.Auth> Validate(Views.Request.Login req);
-        Task<Views.Response.Auth> Refresh(int userId, string refreshToken);
+        Task<Views.Response.Auth> Validate(Views.Request.ValidateAuth req);
+        Task<Views.Response.Auth> Refresh(int userId, string accessToken, string refreshToken);
     }
 
     public class AuthService : IAuthService
@@ -72,9 +72,55 @@ namespace Application.Users.Services
             }
         }
 
-        public async Task<Views.Response.Auth> Refresh(int userId, string refreshToken)
+        public async Task<Views.Response.Auth> Refresh(int userId, string accessToken, string refreshToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                // Check if data was provided
+                if (string.IsNullOrEmpty(refreshToken))
+                {
+                    throw new Exception();
+                }
+
+                // Check if user exists
+                var user = await _UsersContext
+                    .Users
+                    .FindAsync(userId);
+
+                if (user == null)
+                {
+                    throw new Exception();
+                }
+
+                /*
+                // Check if allowed               
+                if (user.AccessToken != accessToken
+                    || user.RefreshToken != refreshToken)
+                {
+                    throw new Exception();
+                }
+                */
+
+                // TODO: generate new accessToken
+                var newAccessToken = "";
+                // TODO: generate new refreshToken
+                var newRefreshToken = "";
+
+                // user.AcessToken = newAccessToken;
+                user.RefreshToken = newRefreshToken;
+
+                _UsersContext.Users.Update(user);
+
+                // Persist context
+                await _UsersContext.SaveChangesAsync();
+
+                var view = new Views.Response.Auth(accessToken, user);
+                return view;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

@@ -30,12 +30,7 @@ namespace Application.Users.Controllers
             }
             catch (Exception ex)
             {
-                var err = new Views.Response.Error
-                {
-                    Type = ex.Source,
-                    Message = ex.Message,
-                    StackTrace = ex.StackTrace
-                };
+                var err = new Core.Views.Response.Error(ex);
                 return BadRequest(err);
             }
         }
@@ -50,12 +45,7 @@ namespace Application.Users.Controllers
             }
             catch (Exception ex)
             {
-                var err = new Views.Response.Error
-                {
-                    Type = ex.Source,
-                    Message = ex.Message,
-                    StackTrace = ex.StackTrace
-                };
+                var err = new Core.Views.Response.Error(ex);
                 return BadRequest(err);
             }
         }

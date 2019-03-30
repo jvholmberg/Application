@@ -16,11 +16,13 @@ namespace Application.Users.Entities
 
         public string Password { get; set; }
 
+        public string AccessToken { get; set; }
+
+        public long AccessTokenLifetime { get; set; }
+
+        public DateTime AccessTokenExpiry { get; set; }
+
         public string RefreshToken { get; set; }
-
-        public int RefreshTokenLifetime { get; set; }
-
-        public DateTime RefreshTokenExpiry { get; set; }
 
         public Role Role { get; set; }
 

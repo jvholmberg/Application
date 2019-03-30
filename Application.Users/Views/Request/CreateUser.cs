@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Application.Users.Views.Request
 {
-    public class Register
+    public class CreateUser
     {
         public string Email { get; set; }
 

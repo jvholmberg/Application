@@ -48,9 +48,7 @@ namespace Application.Users
             services.AddScoped<Services.IBaseService, Services.BaseService>();
             services.AddScoped<Services.IGroupService, Services.GroupService>();
             services.AddScoped<Services.IAuthService, Services.AuthService>();
-            services.AddScoped<Services.IStatusService, Services.StatusService>();
-            services.AddScoped<Services.IRoleService, Services.RoleService>();
-            services.AddScoped<Services.ILanguageService, Services.LanguageService>();
+            services.AddScoped<Services.IBaseService, Services.BaseService>();
 
             // Create key
             var key = Encoding.ASCII.GetBytes(secret);

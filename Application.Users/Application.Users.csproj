@@ -8,6 +8,10 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
     <StartAction>Project</StartAction>
+    <EnvironmentVariables>
+      <Variable name="ASPNETCORE_ENVIRONMENT" value="Development" />
+      <Variable name="ASPNETCORE_ENVIRONMENT" value="Development" />
+    </EnvironmentVariables>
     <ApplicationURL>https://localhost:5002</ApplicationURL>
     <LaunchBrowser>false</LaunchBrowser>
   </PropertyGroup>
@@ -22,5 +26,9 @@
     <Folder Include="Views\" />
     <Folder Include="Views\Request\" />
     <Folder Include="Views\Response\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Services\StatusService.cs" />
+    <Compile Remove="Services\LanguageService.cs" />
   </ItemGroup>
 </Project>

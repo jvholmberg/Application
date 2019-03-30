@@ -1,12 +1,12 @@
 ﻿using System;
 namespace Application.Users.Views.Request
 {
-    public class Update
+    public class UpdateUser
     {
 
-        public string StatusCode { get; set; }
+        public string StatusName { get; set; }
 
-        public string RoleCode { get; set; }
+        public string RoleName { get; set; }
 
         public string LanguageCode { get; set; }
 

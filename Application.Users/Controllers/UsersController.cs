@@ -9,13 +9,13 @@ namespace Application.Users.Controllers
 {
     [Route("api/users")]
     [ApiController]
-    public class BaseController : ControllerBase
+    public class UsersController : ControllerBase
     {
-        private readonly Services.IBaseService _BaseService;
+        private readonly Services.IUserService _UserService;
 
-        public BaseController(Services.IBaseService baseService)
+        public UsersController(Services.IUserService userService)
         {
-            _BaseService = baseService;
+            _UserService = userService;
         }
 
         [HttpGet]
@@ -23,7 +23,7 @@ namespace Application.Users.Controllers
         {
             try
             {
-                var res = await _BaseService.GetAll();
+                var res = await _UserService.GetAll();
                 return Ok(res);
             }
             catch (Exception ex)
@@ -43,7 +43,7 @@ namespace Application.Users.Controllers
         {
             try
             {
-                var res = await _BaseService.GetById(id);
+                var res = await _UserService.GetById(id);
                 return Ok(res);
             }
             catch (Exception ex)
@@ -59,11 +59,11 @@ namespace Application.Users.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] Views.Request.Register req)
+        public async Task<IActionResult> Create([FromBody] Views.Request.CreateUser req)
         {
             try
             {
-                var res = await _BaseService.Register(req);
+                var res = await _UserService.Create(req);
                 return Ok(res);
             }
             catch (Exception ex)
@@ -79,11 +79,11 @@ namespace Application.Users.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Views.Request.Update req)
+        public async Task<IActionResult> Update(int id, [FromBody] Views.Request.UpdateUser req)
         {
             try
             {
-                var res = await _BaseService.Update(id, req);
+                var res = await _UserService.Update(id, req);
                 return Ok(res);
             }
             catch (Exception ex)
@@ -99,11 +99,11 @@ namespace Application.Users.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Deactivate(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                var res = await _BaseService.Deactivate(id);
+                var res = await _UserService.Delete(id);
                 return Ok(res);
             }
             catch (Exception ex)

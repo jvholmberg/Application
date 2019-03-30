@@ -20,30 +20,103 @@ namespace Application.Users.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<IActionResult> GetAll()
         {
-            return new string[] { "groups", "groups" };
+            try
+            {
+                var res = await _GroupService.GetAll();
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                var err = new Views.Response.Error
+                {
+                    Type = ex.Source,
+                    Message = ex.Message,
+                    StackTrace = ex.StackTrace
+                };
+                return BadRequest(err);
+            }
         }
 
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            return "value";
+            try
+            {
+                var res = await _GroupService.GetById(id);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                var err = new Views.Response.Error
+                {
+                    Type = ex.Source,
+                    Message = ex.Message,
+                    StackTrace = ex.StackTrace
+                };
+                return BadRequest(err);
+            }
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Create([FromBody] Views.Request.CreateGroup req)
         {
+            try
+            {
+                var res = await _GroupService.Create(req);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                var err = new Views.Response.Error
+                {
+                    Type = ex.Source,
+                    Message = ex.Message,
+                    StackTrace = ex.StackTrace
+                };
+                return BadRequest(err);
+            }
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Update(int id, [FromBody] Views.Request.UpdateGroup req)
         {
+            try
+            {
+                var res = await _GroupService.Update(id, req);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                var err = new Views.Response.Error
+                {
+                    Type = ex.Source,
+                    Message = ex.Message,
+                    StackTrace = ex.StackTrace
+                };
+                return BadRequest(err);
+            }
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            try
+            {
+                var res = await _GroupService.Delete(id);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                var err = new Views.Response.Error
+                {
+                    Type = ex.Source,
+                    Message = ex.Message,
+                    StackTrace = ex.StackTrace
+                };
+                return BadRequest(err);
+            }
         }
     }
 }

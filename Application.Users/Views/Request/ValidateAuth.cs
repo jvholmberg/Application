@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Application.Users.Views.Request
 {
-    public class Login
+    public class ValidateAuth
     {
 
         public string Email { get; set; }

@@ -19,31 +19,45 @@ namespace Application.Users.Controllers
             _AuthService = authService;
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        [HttpGet("{refreshToken}")]
+        public async Task<IActionResult> Refresh(string refreshToken)
         {
-            return new string[] { "auth", "auth" };
-        }
-
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
+            try
+            {
+                // TODO: Get userId from headers
+                var res = await _AuthService.Refresh(1, refreshToken);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                var err = new Views.Response.Error
+                {
+                    Type = ex.Source,
+                    Message = ex.Message,
+                    StackTrace = ex.StackTrace
+                };
+                return BadRequest(err);
+            }
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Validate([FromBody]Views.Request.Login req)
         {
-        }
-
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            try
+            {
+                var res = await _AuthService.Validate(req);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                var err = new Views.Response.Error
+                {
+                    Type = ex.Source,
+                    Message = ex.Message,
+                    StackTrace = ex.StackTrace
+                };
+                return BadRequest(err);
+            }
         }
     }
 }

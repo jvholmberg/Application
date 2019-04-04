@@ -34,7 +34,9 @@ namespace Application.Users.Services
                 // Check if name was provided
                 if (string.IsNullOrWhiteSpace(req.Name))
                 {
-                    throw new Core.Exceptions.InvalidArgumentsException();
+                    throw new Core
+                        .Exceptions
+                        .InvalidArgumentsException("Name can not be empty");
                 }
 
                 // Get group from context
@@ -45,7 +47,9 @@ namespace Application.Users.Services
                 // Check if group with name already exists
                 if (existingGroup != null)
                 {
-                    throw new Core.Exceptions.ExistingFoundException();
+                    throw new Core
+                        .Exceptions
+                        .ExistingFoundException("Name already taken");
                 }
 
                 // Get user from context
@@ -56,7 +60,9 @@ namespace Application.Users.Services
                 // Check if user exist
                 if (user == null)
                 {
-                    throw new Core.Exceptions.InvalidArgumentsException();
+                    throw new Core
+                        .Exceptions
+                        .InvalidArgumentsException("User not found");
                 }
 
                 // Find status by name
@@ -133,7 +139,9 @@ namespace Application.Users.Services
                 // No entity was found
                 if (group == null)
                 {
-                    throw new Core.Exceptions.NotFoundException();
+                    throw new Core
+                        .Exceptions
+                        .NotFoundException("Group not found");
                 }
 
                 var view = new Views.Response.Group(group);
@@ -158,7 +166,9 @@ namespace Application.Users.Services
                 // Check if group exists
                 if (group == null)
                 {
-                    throw new Core.Exceptions.NotFoundException();
+                    throw new Core
+                        .Exceptions
+                        .NotFoundException("Group not found");
                 }
 
                 // Update Name if provided
@@ -201,7 +211,9 @@ namespace Application.Users.Services
 
                 if (group == null)
                 {
-                    throw new Core.Exceptions.NotFoundException();
+                    throw new Core
+                        .Exceptions
+                        .NotFoundException("Group not found");
                 }
 
                 // Find status by name

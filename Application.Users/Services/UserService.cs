@@ -36,22 +36,28 @@ namespace Application.Users.Services
                     || string.IsNullOrWhiteSpace(req.Password)
                     || string.IsNullOrWhiteSpace(req.PasswordVerify))
                 {
-                    throw new Core.Exceptions.InvalidArgumentsException();
+                    throw new Core
+                        .Exceptions
+                        .InvalidArgumentsException("Email, Password or Verification was empty");
                 }
 
                 // Check if email already in use
-                var entity = await _UsersContext
+                var user = await _UsersContext
                     .Users
                     .SingleOrDefaultAsync(usr => usr.Email.Equals(req.Email));
-                if (entity != null)
+                if (user != null)
                 {
-                    throw new Core.Exceptions.ExistingFoundException();
+                    throw new Core
+                        .Exceptions
+                        .ExistingFoundException("Email is already in use");
                 }
 
                 // Check if passwords match
                 if (!req.Password.Equals(req.PasswordVerify))
                 {
-                    throw new Core.Exceptions.InvalidArgumentsException();
+                    throw new Core
+                        .Exceptions
+                        .InvalidArgumentsException("Passwords did not match");
                 }
 
                 // Find status by name
@@ -64,7 +70,7 @@ namespace Application.Users.Services
 
 
                 // Create new user
-                entity = new Entities.User
+                user = new Entities.User
                 {
                     Email = req.Email,
                     Password = req.Password,
@@ -73,12 +79,12 @@ namespace Application.Users.Services
                     LastUpdated = DateTime.UtcNow,
                     CreatedAt = DateTime.UtcNow
                 };
-                _UsersContext.Users.Add(entity);
+                _UsersContext.Users.Add(user);
 
                 // Persist context
                 await _UsersContext.SaveChangesAsync();
 
-                var view = new Views.Response.User(entity);
+                var view = new Views.Response.User(user);
                 return view;
 
             }
@@ -92,10 +98,10 @@ namespace Application.Users.Services
         {
             try
             {
-                var entities = await _UsersContext
+                var users = await _UsersContext
                     .Users
                     .ToListAsync();
-                var views = entities.Select(usr => new Views.Response.User(usr));
+                var views = users.Select(usr => new Views.Response.User(usr));
                 return views;
             }
             catch (Exception ex)
@@ -109,7 +115,7 @@ namespace Application.Users.Services
             try
             {
                 // Get entity from db
-                var entity = await _UsersContext
+                var user = await _UsersContext
                     .Users
                     .Include(usr => usr.Status)
                     .Include(usr => usr.Role)
@@ -119,12 +125,14 @@ namespace Application.Users.Services
                     .SingleOrDefaultAsync(usr => usr.Id.Equals(id));
 
                 // No entity was found
-                if (entity == null)
+                if (user == null)
                 {
-                    throw new Core.Exceptions.NotFoundException();
+                    throw new Core
+                        .Exceptions
+                        .NotFoundException("User not found");
                 }
 
-                var view = new Views.Response.User(entity);
+                var view = new Views.Response.User(user);
 
                 return view;
             }
@@ -139,7 +147,7 @@ namespace Application.Users.Services
             try
             {
                 // Get entity from db
-                var entity = await _UsersContext
+                var user = await _UsersContext
                     .Users
                     .Include(usr => usr.Status)
                     .Include(usr => usr.Role)
@@ -147,68 +155,70 @@ namespace Application.Users.Services
                     .SingleOrDefaultAsync(usr => usr.Id.Equals(id));
 
                 // No entity was found
-                if (entity == null)
+                if (user == null)
                 {
-                    throw new Core.Exceptions.NotFoundException();
+                    throw new Core
+                        .Exceptions
+                        .NotFoundException("User not found");
                 }
 
                 // Update Status if Provided
                 if (req.StatusName != null)
                 {
                     var status = _BaseService.FindStatusByName(req.StatusName);
-                    entity.Status = status;
+                    user.Status = status;
                 }
 
                 // Update Role if Provided
                 if (req.RoleName != null)
                 {
                     var role = _BaseService.FindRoleByName(req.RoleName);
-                    entity.Role = role;
+                    user.Role = role;
                 }
 
                 // Update Language if Provided
                 if (req.LanguageCode != null)
                 {
                     var language = _BaseService.FindLanguageByCode(req.LanguageCode);
-                    entity.Language = language;
+                    user.Language = language;
                 }
 
                 // Update Email if Provided
                 if (req.Email != null)
                 {
-                    entity.Email = req.Email;
+                    user.Email = req.Email;
                 }
 
                 // Update FirstName if provided
                 if (req.FirstName != null)
                 {
-                    entity.FirstName = req.FirstName;
+                    user.FirstName = req.FirstName;
                 }
 
                 // Update LastName if provided
                 if (req.LastName != null)
                 {
-                    entity.LastName = req.LastName;
+                    user.LastName = req.LastName;
                 }
 
                 // Update Avatar if provided
                 if (req.Avatar != null)
                 {
-                    entity.Avatar = req.Avatar;
+                    user.Avatar = req.Avatar;
                 }
 
                 // Set last time of update
-                entity.LastUpdated = DateTime.UtcNow;
+                user.LastUpdated = DateTime.UtcNow;
 
                 // Update user
                 _UsersContext
                     .Users
-                    .Update(entity);
+                    .Update(user);
 
                 // Persist changes
                 await _UsersContext.SaveChangesAsync();
 
-                var view = new Views.Response.User(entity);
+                var view = new Views.Response.User(user);
                 return view;
 
             }
@@ -223,16 +233,18 @@ namespace Application.Users.Services
             try
             {
                 // Get entity from db
-                var entity = await _UsersContext
+                var user = await _UsersContext
                     .Users
                     .Include(usr => usr.Memberships)
                         .ThenInclude(mem => mem.Group)
                     .SingleOrDefaultAsync(usr => usr.Id.Equals(id));
 
                 // No entity was found
-                if (entity == null)
+                if (user == null)
                 {
-                    throw new Core.Exceptions.NotFoundException();
+                    throw new Core
+                        .Exceptions
+                        .NotFoundException("User not found");
                 }
 
                 // Find status by name
@@ -240,16 +252,16 @@ namespace Application.Users.Services
                 var status = _BaseService.FindStatusByName(statusName);
 
                 // Set status on user and memberships to inactive
-                entity.Status = status;
-                entity.Memberships.Select(mem => mem.Status = status);
+                user.Status = status;
+                user.Memberships.Select(mem => mem.Status = status);
 
                 // Update user
-                _UsersContext.Users.Update(entity);
+                _UsersContext.Users.Update(user);
 
                 // Persist changes
                 await _UsersContext.SaveChangesAsync();
 
-                var view = new Views.Response.User(entity);
+                var view = new Views.Response.User(user);
                 return view;
             }
             catch (Exception ex)

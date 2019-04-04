@@ -42,6 +42,10 @@ namespace Application.Users.Controllers
                 var res = await _GroupService.GetById(id);
                 return Ok(res);
             }
+            catch (Core.Exceptions.NotFoundException)
+            {
+                return NotFound();
+            }
             catch (Exception ex)
             {
                 var err = new Core.Views.Response.Error(ex);
@@ -72,6 +76,10 @@ namespace Application.Users.Controllers
                 var res = await _GroupService.Update(id, req);
                 return Ok(res);
             }
+            catch (Core.Exceptions.NotFoundException)
+            {
+                return NotFound();
+            }
             catch (Exception ex)
             {
                 var err = new Core.Views.Response.Error(ex);
@@ -86,6 +94,10 @@ namespace Application.Users.Controllers
             {
                 var res = await _GroupService.Delete(id);
                 return Ok(res);
+            }
+            catch (Core.Exceptions.NotFoundException)
+            {
+                return NotFound();
             }
             catch (Exception ex)
             {

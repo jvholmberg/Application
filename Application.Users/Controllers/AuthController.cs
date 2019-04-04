@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.Users.Controllers
@@ -27,6 +24,10 @@ namespace Application.Users.Controllers
                 // TODO: Get userId from headers
                 var res = await _AuthService.Refresh(1, "", refreshToken);
                 return Ok(res);
+            }
+            catch (Core.Exceptions.UnauthorizedException)
+            {
+                return Unauthorized();
             }
             catch (Exception ex)
             {

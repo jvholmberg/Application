@@ -34,7 +34,7 @@ namespace Application.Users.Services
                 // Check if name was provided
                 if (string.IsNullOrWhiteSpace(req.Name))
                 {
-                    throw new Exception();
+                    throw new Core.Exceptions.InvalidArgumentsException();
                 }
 
                 // Get group from context
@@ -45,7 +45,7 @@ namespace Application.Users.Services
                 // Check if group with name already exists
                 if (existingGroup != null)
                 {
-                    throw new Exception();
+                    throw new Core.Exceptions.ExistingFoundException();
                 }
 
                 // Get user from context
@@ -56,7 +56,7 @@ namespace Application.Users.Services
                 // Check if user exist
                 if (user == null)
                 {
-                    throw new Exception();
+                    throw new Core.Exceptions.InvalidArgumentsException();
                 }
 
                 // Find status by name
@@ -106,10 +106,10 @@ namespace Application.Users.Services
         {
             try
             {
-                var entities = await _UsersContext
+                var groups = await _UsersContext
                     .Groups
                     .ToListAsync();
-                var views = entities.Select(grp => new Views.Response.Group(grp));
+                var views = groups.Select(grp => new Views.Response.Group(grp));
                 return views;
             }
             catch (Exception ex)
@@ -123,7 +123,7 @@ namespace Application.Users.Services
             try
             {
                 // Get entity from db
-                var entity = await _UsersContext
+                var group = await _UsersContext
                     .Groups
                     .Include(grp => grp.Status)
                     .Include(grp => grp.Memberships)
@@ -131,12 +131,12 @@ namespace Application.Users.Services
                     .SingleOrDefaultAsync(usr => usr.Id.Equals(id));
 
                 // No entity was found
-                if (entity == null)
+                if (group == null)
                 {
-                    throw new Exception();
+                    throw new Core.Exceptions.NotFoundException();
                 }
 
-                var view = new Views.Response.Group(entity);
+                var view = new Views.Response.Group(group);
 
                 return view;
             }
@@ -151,34 +151,34 @@ namespace Application.Users.Services
             try
             {
                 // Get group from context
-                var entity = await _UsersContext
+                var group = await _UsersContext
                     .Groups
                     .FindAsync(id);
 
                 // Check if group exists
-                if (entity == null)
+                if (group == null)
                 {
-                    throw new Exception();
+                    throw new Core.Exceptions.NotFoundException();
                 }
 
                 // Update Name if provided
                 if (req.Name != null)
                 {
-                    entity.Name = req.Name;
+                    group.Name = req.Name;
                 }
 
                 // Set last time of update
-                entity.LastUpdated = DateTime.UtcNow;
+                group.LastUpdated = DateTime.UtcNow;
 
                 // Update group
                 _UsersContext
                     .Groups
-                    .Update(entity);
+                    .Update(group);
 
                 // Persist changes
                 await _UsersContext.SaveChangesAsync();
 
-                var view = new Views.Response.Group(entity);
+                var view = new Views.Response.Group(group);
                 return view;
 
             }
@@ -192,29 +192,34 @@ namespace Application.Users.Services
         {
             try
             {
-                // Get entity from db
-                var entity = await _UsersContext
+                // Get group from db
+                var group = await _UsersContext
                     .Groups
                     .Include(grp => grp.Memberships)
                         .ThenInclude(mem => mem.User)
                     .SingleOrDefaultAsync(usr => usr.Id.Equals(id));
 
+                if (group == null)
+                {
+                    throw new Core.Exceptions.NotFoundException();
+                }
+
                 // Find status by name
                 var statusName = Entities.StatusName.Inactive.ToString();
                 var status = _BaseService.FindStatusByName(statusName);
 
-                // Set status on user and memberships to inactive
-                entity.Status = status;
-                entity.LastUpdated = DateTime.UtcNow;
-                entity.Memberships.Select(mem => mem.Status = status);
+                // Set status on group and memberships to inactive
+                group.Status = status;
+                group.LastUpdated = DateTime.UtcNow;
+                group.Memberships.Select(mem => mem.Status = status);
 
-                // Update user
-                _UsersContext.Groups.Update(entity);
+                // Update group
+                _UsersContext.Groups.Update(group);
 
                 // Persist changes
                 await _UsersContext.SaveChangesAsync();
 
-                var view = new Views.Response.Group(entity);
+                var view = new Views.Response.Group(group);
                 return view;
             }
             catch (Exception ex)

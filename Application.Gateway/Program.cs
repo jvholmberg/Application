@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
@@ -16,6 +21,10 @@ namespace Application.Gateway
     {
         public static void Main(string[] args)
         {
+            CreateWebHostBuilder(args).Build().Run();
+        }
+
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
@@ -28,20 +37,11 @@ namespace Application.Gateway
                         .AddJsonFile("ocelot.json")
                         .AddEnvironmentVariables();
                 })
-                .ConfigureServices(services => {
-                    services.AddOcelot();
-                })
                 .ConfigureLogging((hostingContext, logging) =>
                 {
                     //add your logging
                 })
                 .UseIISIntegration()
-                .Configure(app =>
-                {
-                    app.UseOcelot().Wait();
-                })
-                .Build()
-                .Run();
-        }
+                .UseStartup<Startup>();
     }
 }

@@ -16,11 +16,11 @@ namespace Application.Users.Views.Response
 
         public DateTime RefreshTokenExpiry { get; set; }
 
-        public Auth(string accessToken, Entities.User user)
+        public Auth(string accessToken, long accessTokenLifetime, DateTime accessTokenExpiry, Entities.User user)
         {
             AccessToken = accessToken;
-            AccessTokenLifetime = user.AccessTokenLifetime;
-            AccessTokenExpiry = user.AccessTokenExpiry;
+            AccessTokenLifetime = accessTokenLifetime;
+            AccessTokenExpiry = accessTokenExpiry;
             RefreshToken = user.RefreshToken;
             RefreshTokenLifetime = user.RefreshTokenLifetime;
             RefreshTokenExpiry = user.RefreshTokenExpiry;

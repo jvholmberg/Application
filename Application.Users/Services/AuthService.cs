@@ -30,7 +30,9 @@ namespace Application.Users.Services
                 if (string.IsNullOrWhiteSpace(req.Email)
                     || string.IsNullOrWhiteSpace(req.Password))
                 {
-                    throw new Exception();
+                    throw new Core
+                        .Exceptions
+                        .InvalidArgumentsException("Email or password is empty");
                 }
 
                 // Check if user with email exists
@@ -40,12 +42,16 @@ namespace Application.Users.Services
 
                 if (entity == null)
                 {
-                    throw new Exception();
+                    throw new Core
+                        .Exceptions
+                        .NotFoundException("User with email does not exists");
                 }
 
                 if(entity.Password != req.Password)
                 {
-                    throw new Exception();
+                    throw new Core
+                        .Exceptions
+                        .InvalidArgumentsException("Incorrect password");
                 }
 
                 // Find status by name
@@ -56,6 +62,8 @@ namespace Application.Users.Services
                 entity.Status = status;
                 // TODO: generate new accessToken
                 var accessToken = "";
+                var accessTokenLifetime = 0;
+                var accessTokenExpiry = DateTime.UtcNow;
                 // TODO: generate new refreshToken
 
                 _UsersContext.Users.Update(entity);
@@ -63,7 +71,7 @@ namespace Application.Users.Services
                 // Persist context
                 await _UsersContext.SaveChangesAsync();
 
-                var view = new Views.Response.Auth(accessToken, entity);
+                var view = new Views.Response.Auth(accessToken, accessTokenLifetime, accessTokenExpiry, entity);
                 return view;
             }
             catch (Exception ex)
@@ -79,7 +87,9 @@ namespace Application.Users.Services
                 // Check if data was provided
                 if (string.IsNullOrEmpty(refreshToken))
                 {
-                    throw new Exception();
+                    throw new Core
+                        .Exceptions
+                        .InvalidArgumentsException("No refreshtoken");
                 }
 
                 // Check if user exists
@@ -89,20 +99,23 @@ namespace Application.Users.Services
 
                 if (user == null)
                 {
-                    throw new Exception();
+                    throw new Core
+                        .Exceptions
+                        .UnauthorizedException("Invalid refreshToken");
                 }
 
-                /*
                 // Check if allowed               
-                if (user.AccessToken != accessToken
-                    || user.RefreshToken != refreshToken)
+                if (user.RefreshToken != refreshToken)
                 {
-                    throw new Exception();
+                    throw new Core
+                        .Exceptions
+                        .UnauthorizedException("Invalid refreshToken");
                 }
-                */
 
                 // TODO: generate new accessToken
                 var newAccessToken = "";
+                var newAccessTokenLifetime = 0;
+                var newAccessTokenExpiry = DateTime.UtcNow;
                 // TODO: generate new refreshToken
                 var newRefreshToken = "";
 
@@ -114,7 +127,7 @@ namespace Application.Users.Services
                 // Persist context
                 await _UsersContext.SaveChangesAsync();
 
-                var view = new Views.Response.Auth(accessToken, user);
+                var view = new Views.Response.Auth(newAccessToken, newAccessTokenLifetime, newAccessTokenExpiry, user);
                 return view;
             }
             catch (Exception ex)

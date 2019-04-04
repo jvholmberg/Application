@@ -30,10 +30,9 @@ namespace Application.Users.Controllers
             {
                 return NoContent();
             }
-            catch (Core.Exceptions.UnauthorizedException ex)
+            catch (Core.Exceptions.UnauthorizedException)
             {
-                var err = new Core.Views.Response.Error(ex);
-                return Unauthorized(err);
+                return Forbid();
             }
             catch (Exception ex)
             {
@@ -51,10 +50,19 @@ namespace Application.Users.Controllers
                 var res = await _UserService.GetById(id);
                 return Ok(res);
             }
+            catch (Core.Exceptions.NotFoundException)
+            {
+                return NoContent();
+            }
+            catch (Core.Exceptions.UnauthorizedException)
+            {
+                return Forbid();
+            }
             catch (Exception ex)
             {
-                var err = new Core.Views.Response.Error(ex);
-                return BadRequest(err);
+                throw ex;
+                // var err = new Core.Views.Response.Error(ex);
+                // return BadRequest(err);
             }
         }
 
@@ -66,10 +74,20 @@ namespace Application.Users.Controllers
                 var res = await _UserService.Create(req);
                 return Ok(res);
             }
-            catch (Exception ex)
+            catch (Core.Exceptions.ExistingFoundException ex)
             {
                 var err = new Core.Views.Response.Error(ex);
-                return BadRequest(err);
+                return Conflict(err);
+            }
+            catch (Core.Exceptions.UnauthorizedException)
+            {
+                return Forbid();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+                // var err = new Core.Views.Response.Error(ex);
+                // return BadRequest(err);
             }
         }
 
@@ -81,10 +99,19 @@ namespace Application.Users.Controllers
                 var res = await _UserService.Update(id, req);
                 return Ok(res);
             }
+            catch (Core.Exceptions.NotFoundException)
+            {
+                return NotFound();
+            }
+            catch (Core.Exceptions.UnauthorizedException)
+            {
+                return Forbid();
+            }
             catch (Exception ex)
             {
-                var err = new Core.Views.Response.Error(ex);
-                return BadRequest(err);
+                throw ex;
+                // var err = new Core.Views.Response.Error(ex);
+                // return BadRequest(err);
             }
         }
 
@@ -96,10 +123,19 @@ namespace Application.Users.Controllers
                 var res = await _UserService.Delete(id);
                 return Ok(res);
             }
+            catch (Core.Exceptions.NotFoundException)
+            {
+                return NotFound();
+            }
+            catch (Core.Exceptions.UnauthorizedException)
+            {
+                return Forbid();
+            }
             catch (Exception ex)
             {
-                var err = new Core.Views.Response.Error(ex);
-                return BadRequest(err);
+                throw ex;
+                // var err = new Core.Views.Response.Error(ex);
+                // return BadRequest(err);
             }
         }
     }

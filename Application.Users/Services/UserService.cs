@@ -36,7 +36,7 @@ namespace Application.Users.Services
                     || string.IsNullOrWhiteSpace(req.Password)
                     || string.IsNullOrWhiteSpace(req.PasswordVerify))
                 {
-                    throw new Exception();
+                    throw new Core.Exceptions.InvalidArgumentsException();
                 }
 
                 // Check if email already in use
@@ -45,13 +45,13 @@ namespace Application.Users.Services
                     .SingleOrDefaultAsync(usr => usr.Email.Equals(req.Email));
                 if (entity != null)
                 {
-                    throw new Exception();
+                    throw new Core.Exceptions.ExistingFoundException();
                 }
 
                 // Check if passwords match
                 if (!req.Password.Equals(req.PasswordVerify))
                 {
-                    throw new Exception();
+                    throw new Core.Exceptions.InvalidArgumentsException();
                 }
 
                 // Find status by name
@@ -121,7 +121,7 @@ namespace Application.Users.Services
                 // No entity was found
                 if (entity == null)
                 {
-                    throw new Exception();
+                    throw new Core.Exceptions.NotFoundException();
                 }
 
                 var view = new Views.Response.User(entity);
@@ -145,6 +145,12 @@ namespace Application.Users.Services
                     .Include(usr => usr.Role)
                     .Include(usr => usr.Language)
                     .SingleOrDefaultAsync(usr => usr.Id.Equals(id));
+
+                // No entity was found
+                if (entity == null)
+                {
+                    throw new Core.Exceptions.NotFoundException();
+                }
 
                 // Update Status if Provided
                 if (req.StatusName != null)
@@ -222,6 +228,12 @@ namespace Application.Users.Services
                     .Include(usr => usr.Memberships)
                         .ThenInclude(mem => mem.Group)
                     .SingleOrDefaultAsync(usr => usr.Id.Equals(id));
+
+                // No entity was found
+                if (entity == null)
+                {
+                    throw new Core.Exceptions.NotFoundException();
+                }
 
                 // Find status by name
                 var statusName = Entities.StatusName.Inactive.ToString();

@@ -1,10 +1,12 @@
 ﻿using System;
 namespace Application.Core.Exceptions
 {
-    public class NoArgumentsException
+    public class InvalidArgumentsException : Exception
     {
-        public NoArgumentsException()
-        {
-        }
+        public InvalidArgumentsException(string message)
+            : base(message) { }
+
+        public InvalidArgumentsException()
+            : base() { }
     }
 }

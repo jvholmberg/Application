@@ -35,8 +35,6 @@ namespace Application.Users
             var connectionString = _Configuration
                 .GetConnectionString("DatabaseConnection");
 
-            // Get jwt-secret
-            var secret = "secret";
 
             // Create connection to postgress
             services
@@ -49,57 +47,6 @@ namespace Application.Users
             services.AddScoped<Services.IGroupService, Services.GroupService>();
             services.AddScoped<Services.IAuthService, Services.AuthService>();
             services.AddScoped<Services.IUserService, Services.UserService>();
-
-            // Create key
-            var key = Encoding.ASCII.GetBytes(secret);
-            var signingKey = new SymmetricSecurityKey(key);
-
-            // Setup validation
-            var validationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = signingKey,
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ValidateLifetime = true,
-            };
-
-            // Configure authentication
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                options.Events = new JwtBearerEvents()
-                {
-                    OnTokenValidated = context =>
-                    {
-                        var token = context.SecurityToken as JwtSecurityToken;
-                        var payload = token.Payload;
-
-                        // Create new header containing user-id
-                        if (payload.TryGetValue("unique_name", out object userIdObj))
-                        {
-                            var userId = userIdObj as string;
-                            context.Request.Headers.Add("UserId", userId);
-                        }
-
-                        // create new header containing user-role
-                        if (payload.TryGetValue("role", out object userRoleObj))
-                        {
-                            var userRole = userRoleObj as string;
-                            context.Request.Headers.Add("UserRole", userRole);
-                        }
-
-                        return Task.CompletedTask;
-                    }
-                };
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
-                options.TokenValidationParameters = validationParameters;
-            });
 
             // Setup mvc
             services

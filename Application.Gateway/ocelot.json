@@ -1,45 +1,16 @@
 ﻿{
   "ReRoutes": [
-    /* Application.Users */
 
-    {
-      "DownstreamPathTemplate": "/api/users",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5002
-        }
-      ],
-      "UpstreamPathTemplate": "/api/users"
-    },
-    {
-      "DownstreamPathTemplate": "/api/users/{id}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5002
-        }
-      ],
-      "UpstreamPathTemplate": "/api/users/{id}"
-    },
+    /************************************************************************/
 
-    {
-      "DownstreamPathTemplate": "/api/users/groups",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5002
-        }
-      ],
-      "UpstreamPathTemplate": "/api/users/groups"
-    },
-
+    /* Application.Users (AuthController)
+     * @Route: /api/users/auth
+     * @method: [ Post ]
+     */
     {
       "DownstreamPathTemplate": "/api/users/auth",
       "DownstreamScheme": "https",
+      "UpstreamHttpMethod": [ "Post" ],
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
@@ -48,6 +19,129 @@
       ],
       "UpstreamPathTemplate": "/api/users/auth"
     },
+
+    /* Application.Users (AuthController)
+     * @Route: /api/users/auth/{refreshToken}
+     * @method: [ Get ]
+     */
+    {
+      "DownstreamPathTemplate": "/api/users/auth/{refreshToken}",
+      "DownstreamScheme": "https",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users/auth/{refreshToken}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "AuthenticationProvider"
+      }
+    },
+
+    /************************************************************************/
+
+    /* Application.Users (GroupsController)
+     * @Route: /api/users/groups
+     * @method: [ Post, Get ]
+     */
+    {
+      "DownstreamPathTemplate": "/api/users/groups",
+      "DownstreamScheme": "https",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users/groups",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "AuthenticationProvider"
+      }
+    },
+
+    /* Application.Users (GroupsController)
+     * @Route: /api/users/groups/{id}
+     * @method: [ Put, Get, Delete ]
+     */
+    {
+      "DownstreamPathTemplate": "/api/users/groups/{id}",
+      "DownstreamScheme": "https",
+      "UpstreamHttpMethod": [ "Put", "Get", "Delete" ],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users/groups/{id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "AuthenticationProvider"
+      }
+    },
+
+    /************************************************************************/
+
+    /* Application.Users (UsersController)
+     * @Route: /api/users
+     * @method: [ Post ] 
+     */
+    {
+      "DownstreamPathTemplate": "/api/users",
+      "DownstreamScheme": "https",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users"
+    },
+
+    /* Application.Users (UsersController)
+     * @Route: /api/users
+     * @method: [ Get ]
+     */
+    {
+      "DownstreamPathTemplate": "/api/users",
+      "DownstreamScheme": "https",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "AuthenticationProvider"
+      }
+    },
+
+    /* Application.Users (UsersController)
+     * @Route: /api/users/{id}
+     * @method: [ Put, Get, Delete ]
+     */
+    {
+      "DownstreamPathTemplate": "/api/users/{id}",
+      "DownstreamScheme": "https",
+      "UpstreamHttpMethod": [ "Put", "Get", "Delete" ],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users/{id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "AuthenticationProvider"
+      }
+    },
+
+    /************************************************************************/
 
     /* Application.Posts */
     
@@ -60,7 +154,10 @@
           "Port": 5003
         }
       ],
-      "UpstreamPathTemplate": "/api/posts"
+      "UpstreamPathTemplate": "/api/posts",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "AuthenticationProvider"
+      }
     }
   ],
   "GlobalConfiguration": {

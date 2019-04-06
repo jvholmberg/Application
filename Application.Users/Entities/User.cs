@@ -18,10 +18,6 @@ namespace Application.Users.Entities
 
         public string RefreshToken { get; set; }
 
-        public long RefreshTokenLifetime { get; set; }
-
-        public DateTime RefreshTokenExpiry { get; set; }
-
         public Role Role { get; set; }
 
         public Language Language { get; set; }

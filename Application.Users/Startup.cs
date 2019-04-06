@@ -35,6 +35,8 @@ namespace Application.Users
             var connectionString = _Configuration
                 .GetConnectionString("DatabaseConnection");
 
+            var usersSettings = _Configuration.GetSection("UsersSettings");
+            services.Configure<UsersSettings>(usersSettings);
 
             // Create connection to postgress
             services

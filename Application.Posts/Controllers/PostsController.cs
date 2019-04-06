@@ -8,7 +8,7 @@ namespace Application.Posts.Controllers
 {
     [Route("api/posts")]
     [ApiController]
-    public class BaseController : ControllerBase
+    public class PostsController : ControllerBase
     {
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()

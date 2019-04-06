@@ -1,6 +1,11 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Application.Users.Services
 {
@@ -15,11 +20,13 @@ namespace Application.Users.Services
 
         private readonly UsersContext _UsersContext;
         private readonly IBaseService _BaseService;
+        private readonly UsersSettings _UsersSettings;
 
-        public AuthService(UsersContext usersContext)
+        public AuthService(IOptions<UsersSettings> usersSettings, UsersContext usersContext)
         {
             _UsersContext = usersContext;
             _BaseService = new BaseService(usersContext);
+            _UsersSettings = usersSettings.Value;
         }
 
         public async Task<Views.Response.Auth> Validate(Views.Request.ValidateAuth req)
@@ -36,42 +43,45 @@ namespace Application.Users.Services
                 }
 
                 // Check if user with email exists
-                var entity = await _UsersContext
+                var user = await _UsersContext
                     .Users
+                    .Include(usr => usr.Status)
+                    .Include(usr => usr.Role)
                     .SingleOrDefaultAsync(usr => usr.Email.Equals(req.Email));
 
-                if (entity == null)
+                if (user == null)
                 {
                     throw new Core
                         .Exceptions
                         .NotFoundException("User with email does not exists");
                 }
 
-                if(entity.Password != req.Password)
+                if(user.Password != req.Password)
                 {
                     throw new Core
                         .Exceptions
                         .InvalidArgumentsException("Incorrect password");
                 }
 
-                // Find status by name
-                var statusName = Entities.StatusName.Pending.ToString();
+                // Find status by name and update user
+                var statusName = Entities.StatusName.Active.ToString();
                 var status = _BaseService.FindStatusByName(statusName);
+                user.Status = status;
 
-                // Update user
-                entity.Status = status;
-                // TODO: generate new accessToken
-                var accessToken = "";
-                var accessTokenLifetime = 0;
-                var accessTokenExpiry = DateTime.UtcNow;
-                // TODO: generate new refreshToken
+                // Create new accessToken
+                var expiry = DateTime.UtcNow.AddHours(1);
+                var accessToken = CreateAccessToken(user, expiry);
 
-                _UsersContext.Users.Update(entity);
+                // Create new refreshToken
+                var refreshToken = CreateRefreshToken();
+                user.RefreshToken = refreshToken;
+
+                _UsersContext.Users.Update(user);
 
                 // Persist context
                 await _UsersContext.SaveChangesAsync();
 
-                var view = new Views.Response.Auth(accessToken, accessTokenLifetime, accessTokenExpiry, entity);
+                var view = new Views.Response.Auth(accessToken, expiry, user);
                 return view;
             }
             catch (Exception ex)
@@ -95,13 +105,23 @@ namespace Application.Users.Services
                 // Check if user exists
                 var user = await _UsersContext
                     .Users
-                    .FindAsync(userId);
+                    .Include(usr => usr.Status)
+                    .Include(usr => usr.Role)
+                    .SingleOrDefaultAsync(usr => usr.Id.Equals(userId));
 
                 if (user == null)
                 {
                     throw new Core
                         .Exceptions
                         .UnauthorizedException("Invalid refreshToken");
+                }
+
+                // Check if user active
+                if (user.Status.Name != Entities.StatusName.Active.ToString())
+                {
+                    throw new Core
+                        .Exceptions
+                        .UnauthorizedException("User inactive");
                 }
 
                 // Check if allowed               
@@ -112,28 +132,51 @@ namespace Application.Users.Services
                         .UnauthorizedException("Invalid refreshToken");
                 }
 
-                // TODO: generate new accessToken
-                var newAccessToken = "";
-                var newAccessTokenLifetime = 0;
-                var newAccessTokenExpiry = DateTime.UtcNow;
-                // TODO: generate new refreshToken
-                var newRefreshToken = "";
+                // Create new accessToken
+                var expiry = DateTime.UtcNow.AddHours(1);
+                var newAccessToken = CreateAccessToken(user, expiry);
 
-                // user.AcessToken = newAccessToken;
+                // Create new refreshToken
+                var newRefreshToken = CreateRefreshToken();
                 user.RefreshToken = newRefreshToken;
 
-                _UsersContext.Users.Update(user);
-
                 // Persist context
+                _UsersContext.Users.Update(user);
                 await _UsersContext.SaveChangesAsync();
 
-                var view = new Views.Response.Auth(newAccessToken, newAccessTokenLifetime, newAccessTokenExpiry, user);
+                var view = new Views.Response.Auth(newAccessToken, expiry, user);
                 return view;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+        }
+
+        public string CreateAccessToken(Entities.User user, DateTime expiry)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_UsersSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.Email),
+                    new Claim(ClaimTypes.Role, user.Role.Name),
+                }),
+                Expires = expiry,
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var securitytoken = tokenHandler.CreateToken(tokenDescriptor);
+            var accessToken = tokenHandler.WriteToken(securitytoken);
+            return accessToken;
+        }
+
+        public string CreateRefreshToken()
+        {
+            var refreshToken = Guid.NewGuid().ToString();
+            return refreshToken;
         }
     }
 }

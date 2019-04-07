@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.Posts.Entities
 {
     public class Post
     {
 
+        [Key]
         public int Id { get; set; }
 
         public int GroupId { get; set; }
@@ -24,8 +26,5 @@ namespace Application.Posts.Entities
 
         public DateTime LastUpdated { get; set; }
 
-        public Post()
-        {
-        }
     }
 }

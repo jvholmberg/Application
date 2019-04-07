@@ -3,9 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Application.Posts.Entities
 {
-    public class Status
+    public class Type
     {
-
         [Key]
         public int Id { get; set; }
 
@@ -13,10 +12,10 @@ namespace Application.Posts.Entities
 
     }
 
-    public enum StatusName
+    public enum TypeName
     {
-        Inactive,
-        Pending,
-        Active
+        Promotion,
+        Article,
+        Thread,
     }
 }

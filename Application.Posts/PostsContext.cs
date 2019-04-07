@@ -11,6 +11,7 @@ namespace Application.Posts
         public DbSet<Entities.Post> Posts { get; set; }
         public DbSet<Entities.Comment> Comments { get; set; }
         public DbSet<Entities.Status> Statuses { get; set; }
+        public DbSet<Entities.Type> Types { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -38,6 +39,11 @@ namespace Application.Posts
             modelBuilder
                 .Entity<Entities.Status>()
                 .ToTable("status");
+
+            // Type
+            modelBuilder
+                .Entity<Entities.Type>()
+                .ToTable("type");
         }
     }
 }

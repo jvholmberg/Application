@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -15,17 +16,34 @@ namespace Application.Posts
 {
     public class Startup
     {
+
+        public IConfiguration _Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _Configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            // Get connection-string from config
+            var connectionString = _Configuration
+                .GetConnectionString("DatabaseConnection");
+
+            var usersSettings = _Configuration.GetSection("UsersSettings");
+            services.Configure<PostsContext>(usersSettings);
+
+            // Create connection to postgress
+            services
+                .AddEntityFrameworkNpgsql()
+                .AddDbContext<PostsContext>(options =>
+                    options.UseNpgsql(connectionString));
+
+            services
+                .AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

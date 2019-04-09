@@ -21,6 +21,12 @@ namespace Application.Posts
                 .ToTable("post");
             modelBuilder
                 .Entity<Entities.Post>()
+                .HasOne(pst => pst.Category);
+            modelBuilder
+                .Entity<Entities.Post>()
+                .HasOne(pst => pst.Type);
+            modelBuilder
+                .Entity<Entities.Post>()
                 .HasOne(pst => pst.Status);
 
             // Comments
@@ -35,15 +41,21 @@ namespace Application.Posts
                 .HasOne(com => com.Post)
                 .WithMany(pst => pst.Comments);
 
-            // Status
+            // Type
             modelBuilder
-                .Entity<Entities.Status>()
-                .ToTable("status");
+                .Entity<Entities.Category>()
+                .ToTable("category");
 
             // Type
             modelBuilder
                 .Entity<Entities.Type>()
                 .ToTable("type");
+
+            // Status
+            modelBuilder
+                .Entity<Entities.Status>()
+                .ToTable("status");
+
         }
     }
 }

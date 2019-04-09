@@ -11,9 +11,9 @@ namespace Application.Posts.Controllers
     public class PostsController : ControllerBase
     {
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<IActionResult> GetAll()
         {
-            return new string[] { "posts", "posts" };
+            return Ok();
         }
 
         [HttpGet("{id}")]

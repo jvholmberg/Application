@@ -69,7 +69,7 @@ namespace Application.Users.Services
                 user.Status = status;
 
                 // Create new accessToken
-                var expiry = DateTime.UtcNow.AddHours(1);
+                var expiry = DateTime.UtcNow.AddDays(3);
                 var accessToken = CreateAccessToken(user, expiry);
 
                 // Create new refreshToken
@@ -133,7 +133,7 @@ namespace Application.Users.Services
                 }
 
                 // Create new accessToken
-                var expiry = DateTime.UtcNow.AddHours(1);
+                var expiry = DateTime.UtcNow.AddDays(3);
                 var newAccessToken = CreateAccessToken(user, expiry);
 
                 // Create new refreshToken

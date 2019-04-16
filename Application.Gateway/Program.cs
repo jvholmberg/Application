@@ -41,7 +41,7 @@ namespace Application.Gateway
                 {
                     //add your logging
                 })
-                .UseIISIntegration()
+                .UseIIS()
                 .UseStartup<Startup>();
     }
 }

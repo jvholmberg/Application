@@ -10,19 +10,22 @@ namespace Application.Users.Controllers
     {
 
         private readonly Services.IAuthService _AuthService;
+        private readonly Core.Util.IJwt _Jwt;
 
         public AuthController(Services.IAuthService authService)
         {
             _AuthService = authService;
+            _Jwt = new Core.Util.Jwt();
         }
 
         [HttpGet("{refreshToken}")]
-        public async Task<IActionResult> Refresh(string refreshToken)
+        public async Task<IActionResult> Refresh([FromHeader]string authorization, string refreshToken)
         {
             try
             {
-                // TODO: Get userId from headers
-                var res = await _AuthService.Refresh(1, "", refreshToken);
+                var userId = (int)_Jwt.GetUserId(authorization);
+                var accessToken = _Jwt.getAccessToken(authorization);
+                var res = await _AuthService.Refresh(userId, accessToken, refreshToken);
                 return Ok(res);
             }
             catch (Core.Exceptions.UnauthorizedException)

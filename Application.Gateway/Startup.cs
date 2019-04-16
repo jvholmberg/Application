@@ -56,6 +56,7 @@ namespace Application.Gateway
             })
             .AddJwtBearer(authenticationProvider, options =>
             {
+                /*
                 options.Events = new JwtBearerEvents()
                 {
                     OnTokenValidated = context =>
@@ -64,14 +65,21 @@ namespace Application.Gateway
                         var payload = token.Payload;
 
                         // Create new header containing user-id
-                        if (payload.TryGetValue("user_id", out object userIdObj))
+                        if (payload.TryGetValue("nameid", out object userIdObj))
                         {
                             var userId = userIdObj as string;
                             context.Request.Headers.Add("UserId", userId);
                         }
 
                         // create new header containing user-role
-                        if (payload.TryGetValue("user_role", out object userRoleObj))
+                        if (payload.TryGetValue("unique_name", out object userEmailObj))
+                        {
+                            var userEmail = userEmailObj as string;
+                            context.Request.Headers.Add("UserEmail", userEmail);
+                        }
+
+                        // create new header containing user-role
+                        if (payload.TryGetValue("role", out object userRoleObj))
                         {
                             var userRole = userRoleObj as string;
                             context.Request.Headers.Add("UserRole", userRole);
@@ -80,6 +88,7 @@ namespace Application.Gateway
                         return Task.CompletedTask;
                     }
                 };
+                */
                 options.RequireHttpsMetadata = false;
                 options.SaveToken = true;
                 options.TokenValidationParameters = validationParameters;

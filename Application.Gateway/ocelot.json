@@ -21,6 +21,26 @@
     },
 
     /* Application.Users (AuthController)
+     * @Route: /api/users/auth
+     * @method: [ Get ]
+     */
+    {
+      "DownstreamPathTemplate": "/api/users/auth",
+      "DownstreamScheme": "https",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users/auth",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "AuthenticationProvider"
+      }
+    },
+
+    /* Application.Users (AuthController)
      * @Route: /api/users/auth/{refreshToken}
      * @method: [ Get ]
      */

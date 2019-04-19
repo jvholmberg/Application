@@ -39,6 +39,13 @@ namespace Application.Users.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult Validate()
+        {
+            var res = new Core.Views.Confirmation("ok");
+            return Ok(res);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Validate([FromBody]Views.Request.ValidateAuth req)
         {

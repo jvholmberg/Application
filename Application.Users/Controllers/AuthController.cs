@@ -18,6 +18,28 @@ namespace Application.Users.Controllers
             _Jwt = new Core.Util.Jwt();
         }
 
+        [HttpGet]
+        public IActionResult Validate()
+        {
+            var res = new Core.Views.Confirmation("ok");
+            return Ok(res);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Validate([FromBody]Views.Request.ValidateAuth req)
+        {
+            try
+            {
+                var res = await _AuthService.Validate(req);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                var err = new Core.Views.Response.Error(ex);
+                return BadRequest(err);
+            }
+        }
+
         [HttpGet("{refreshToken}")]
         public async Task<IActionResult> Refresh([FromHeader]string authorization, string refreshToken)
         {
@@ -39,20 +61,16 @@ namespace Application.Users.Controllers
             }
         }
 
-        [HttpGet]
-        public IActionResult Validate()
-        {
-            var res = new Core.Views.Confirmation("ok");
-            return Ok(res);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Validate([FromBody]Views.Request.ValidateAuth req)
+        [HttpDelete]
+        public async Task<IActionResult> Destroy([FromHeader]string authorization)
         {
             try
             {
-                var res = await _AuthService.Validate(req);
+                var userId = (int)_Jwt.GetUserId(authorization);
+                await _AuthService.Destroy(userId);
+                var res = new Core.Views.Confirmation("destroyed");
                 return Ok(res);
+
             }
             catch (Exception ex)
             {

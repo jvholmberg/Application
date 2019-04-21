@@ -22,12 +22,12 @@
 
     /* Application.Users (AuthController)
      * @Route: /api/users/auth
-     * @method: [ Get ]
+     * @method: [ Get, Delete ]
      */
     {
       "DownstreamPathTemplate": "/api/users/auth",
       "DownstreamScheme": "https",
-      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamHttpMethod": [ "Get", "Delete" ],
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",

@@ -13,6 +13,7 @@ namespace Application.Users.Services
     {
         Task<Views.Response.Auth> Validate(Views.Request.ValidateAuth req);
         Task<Views.Response.Auth> Refresh(int userId, string accessToken, string refreshToken);
+        Task<bool> Destroy(int userId);
     }
 
     public class AuthService : IAuthService
@@ -125,7 +126,8 @@ namespace Application.Users.Services
                 }
 
                 // Check if allowed               
-                if (user.RefreshToken != refreshToken)
+                if (user.RefreshToken != refreshToken
+                    || refreshToken == null)
                 {
                     throw new Core
                         .Exceptions
@@ -146,6 +148,37 @@ namespace Application.Users.Services
 
                 var view = new Views.Response.Auth(newAccessToken, expiry, user);
                 return view;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<bool> Destroy(int userId)
+        {
+            try
+            {
+                // Check if user exists
+                var user = await _UsersContext
+                    .Users
+                    .SingleOrDefaultAsync(usr => usr.Id.Equals(userId));
+
+                if (user == null)
+                {
+                    throw new Core
+                        .Exceptions
+                        .UnauthorizedException("User not found");
+                }
+
+                // Remove existing refreshtoken
+                user.RefreshToken = null;
+
+                // Persist context
+                _UsersContext.Users.Update(user);
+                await _UsersContext.SaveChangesAsync();
+
+                return true;
             }
             catch (Exception ex)
             {

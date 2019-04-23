@@ -8,6 +8,7 @@
     <Folder Include="Exceptions\" />
     <Folder Include="Views\" />
     <Folder Include="Util\" />
+    <Folder Include="Views\Response\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.4.0" />

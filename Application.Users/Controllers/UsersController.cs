@@ -67,7 +67,7 @@ namespace Application.Users.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Views.Request.CreateUser req)
+        public async Task<IActionResult> Create([FromBody]Views.Request.CreateUser req)
         {
             try
             {
@@ -92,7 +92,7 @@ namespace Application.Users.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Views.Request.UpdateUser req)
+        public async Task<IActionResult> Update(int id, [FromBody]Views.Request.UpdateUser req)
         {
             try
             {

@@ -5,7 +5,6 @@ namespace Application.Posts.Entities
 {
     public class Comment
     {
-
         [Key]
         public int Id { get; set; }
 
@@ -20,6 +19,5 @@ namespace Application.Posts.Entities
         public DateTime CreatedAt { get; set; }
 
         public DateTime LastUpdated { get; set; }
-
     }
 }

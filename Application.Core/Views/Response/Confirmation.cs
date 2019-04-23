@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Application.Core.Views
+namespace Application.Core.Views.Response
 {
     public class Confirmation
     {

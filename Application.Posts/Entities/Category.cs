@@ -5,7 +5,6 @@ namespace Application.Posts.Entities
 {
     public class Category
     {
-
         [Key]
         public int Id { get; set; }
 

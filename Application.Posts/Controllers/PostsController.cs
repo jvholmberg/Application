@@ -10,6 +10,29 @@ namespace Application.Posts.Controllers
     [ApiController]
     public class PostsController : ControllerBase
     {
+
+        // POST: api/posts (Create post)
+
+        // PUT: api/posts (Edit post)
+
+        // GET: api/posts (Get all posts)
+
+        // GET: api/posts/{id} (Get post)
+
+        // DELETE: api/posts/{id} (Delete post)
+
+
+
+
+        // POST: api/posts/{id}/comments (Add comment)
+
+        // PUT: api/posts/{id}/comments/{id} (Edit comment)
+
+        // DELETE: api/posts/{id}/comments/{id} (Delete comment)
+
+
+
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {

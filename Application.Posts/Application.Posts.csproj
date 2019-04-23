@@ -19,6 +19,8 @@
     <Folder Include="Entities\" />
     <Folder Include="Views\" />
     <Folder Include="Services\" />
+    <Folder Include="Views\Request\" />
+    <Folder Include="Views\Response\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Application.Core\Application.Core.csproj" />

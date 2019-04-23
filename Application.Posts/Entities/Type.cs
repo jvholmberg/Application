@@ -9,7 +9,6 @@ namespace Application.Posts.Entities
         public int Id { get; set; }
 
         public string Name { get; set; }
-
     }
 
     public enum TypeName

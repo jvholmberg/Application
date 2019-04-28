@@ -11,7 +11,7 @@ namespace Application.Posts.Entities
 
         public int GroupId { get; set; }
 
-        public int UserId { get; set; }
+        public User User { get; set; }
 
         public Category Category { get; set; }
 
